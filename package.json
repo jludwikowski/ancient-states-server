@@ -1,0 +1,37 @@
+{
+  "name": "ancient-states-server",
+  "version": "1.0.0",
+  "description": "Server for Ancient States Game",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "nodemon --exec babel-node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ancient-states-server"
+  },
+  "keywords": [
+    "game",
+    "strategy",
+    "antiquity"
+  ],
+  "author": "Julian Ludwikowki",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/node": "^7.2.2",
+    "@babel/polyfill": "^7.4.3",
+    "hapi": "^18.1.0",
+    "hapi-waterline": "^1.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "nodemon": "^1.18.11",
+    "jest": "^24.7.1"
+  }
+}
