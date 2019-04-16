@@ -14,7 +14,7 @@ server.route({
     },
 });
 
-async function start () {
+async function start() {
     // start your server
     try {
         await server.start();
