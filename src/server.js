@@ -1,19 +1,11 @@
 import Hapi from 'hapi';
 import HapiWaterline from 'hapi-waterline';
 import diskAdapter from 'sails-disk';
+import apiRoute from './routes/api';
 
 const server = new Hapi.Server({
     host: 'localhost',
     port: 7777,
-});
-
-/* Obviously to be removed */
-server.route({
-    method: 'GET',
-    path: '/',
-    handler: (request, h) => {
-        return 'Hello There. General Kanobi!';
-    },
 });
 
 async function reginsterWaterline() {
@@ -41,9 +33,9 @@ async function reginsterWaterline() {
 }
 
 async function start() {
-    // start your server
     try {
         await reginsterWaterline();
+        server.route(apiRoute);
         await server.start();
     } catch (err) {
         console.error(err);
@@ -54,3 +46,5 @@ async function start() {
 }
 
 start()
+
+module.exports = server;
