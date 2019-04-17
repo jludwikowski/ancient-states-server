@@ -6,6 +6,7 @@ import postApiRoute from './routes/postApi';
 import startState from './services/populateWithBasicData';
 import playerActions from './playerActions';
 
+/* For now all options are hardcoded. This will move to config file */
 const server = new Hapi.Server({
     host: 'localhost',
     port: 7777,
@@ -25,7 +26,7 @@ async function reginsterWaterline() {
             datatstore: 'default',
             migrate: 'alter',
         },
-        decorateServer: true, // decorate server by method - getModel
+        decorateServer: true,
         path: ['../../../src/models'],
     };
 

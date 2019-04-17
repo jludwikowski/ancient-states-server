@@ -1,3 +1,4 @@
+/* Here we have all actions for now. We might divide it later into semantic sections/files */
 module.exports = {
 
     initialize(waterline) {

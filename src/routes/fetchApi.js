@@ -1,3 +1,4 @@
+/* Divinding api into 2 section due to plans of having a lot of actions. This is just for clariy */
 import playerActions from '../playerActions';
 
 /* This is only for managing request and responces */
@@ -16,6 +17,7 @@ module.exports = {
                 statusCode: 404,
             }).code(404);
         } catch (err) {
+            /* We won't pass exact error due to security reasons */
             return responseToolkit.response({
                 statusCode: 500,
                 error: 'Server Error',
