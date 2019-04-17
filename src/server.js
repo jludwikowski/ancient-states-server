@@ -3,6 +3,7 @@ import HapiWaterline from 'hapi-waterline';
 import diskAdapter from 'sails-disk';
 import getApiRoute from './routes/fetchApi';
 import postApiRoute from './routes/postApi';
+import startState from './services/populateWithBasicData';
 
 const server = new Hapi.Server({
     host: 'localhost',
@@ -37,6 +38,7 @@ async function start() {
     try {
         await reginsterWaterline();
         server.route(getApiRoute, postApiRoute);
+        await startState.repopulateAll(server.plugins['hapi-waterline']);
         await server.start();
     } catch (err) {
         console.error(err);
