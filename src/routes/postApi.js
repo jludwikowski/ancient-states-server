@@ -15,7 +15,7 @@ module.exports = {
             return responseToolkit.response({
                 error: 'Not Found',
                 message: 'This is not the endpoint you are looking for',
-                code: 404,
+                statusCode: 404,
             }).code(404);
         } catch (err) {
             return responseToolkit.response({

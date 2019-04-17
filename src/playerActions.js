@@ -1,18 +1,31 @@
 module.exports = {
 
+    initialize(waterline) {
+        this.waterline = waterline;
+    },
+
+    async fetchData(action, payload) {
+        /* Decide what needs to be cached here and how */
+        return this[`get${action}`](payload);
+    },
+
     isValidFecthAction(action) {
         switch (action) {
             case 'PlayerBuildings':
                 return true;
             case 'PlayerArmies':
                 return true;
+            case 'BaseBuildings':
+                return true;
+            case 'BaseUnits':
+                return true;
             default:
                 return false;
         }
     },
 
-    isValidPostAction(endPoint) {
-        switch (endPoint) {
+    isValidPostAction(action) {
+        switch (action) {
             case 'UpgradeBuilding':
                 return true;
             case 'CreatArmy':
@@ -22,6 +35,14 @@ module.exports = {
             default:
                 return false;
         }
+    },
+
+    getBaseBuildings() {
+        return this.waterline.models.baseunit.find();
+    },
+
+    getBaseUnits() {
+        return this.waterline.models.basebuilding.find();
     },
 
 }

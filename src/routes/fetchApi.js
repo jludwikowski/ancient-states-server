@@ -7,15 +7,13 @@ module.exports = {
     handler: async (request, responseToolkit) => {
         try {
             if (playerActions.isValidFecthAction(request.params.action)) {
-                return responseToolkit.response({
-                    mockObject: 'mock',
-                }).code(200);
+                return playerActions.fetchData(request.params.action);
             }
             /* Invalid api call */
             return responseToolkit.response({
                 error: 'Not Found',
                 message: 'This is not the endpoint you are looking for',
-                code: 404,
+                statusCode: 404,
             }).code(404);
         } catch (err) {
             return responseToolkit.response({
