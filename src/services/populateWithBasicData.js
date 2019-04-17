@@ -67,12 +67,49 @@ module.exports = {
         await waterline.models.baseunit.createEach(baseUnits);
     },
 
+    async populateUsers(waterline) {
+        /* Check if this is a new game start */
+        /* taking out persian empire to avoid waterline warnings */
+        const persianEmpire = await waterline.models.user.find({ id: 1 });
+        if (persianEmpire.length) {
+            await Promise.all([
+                waterline.models.user.destroy({ id: 1 }),
+                waterline.models.city.destroy({ id: 1 }),
+            ]);
+
+            const startUsers = [{
+                id: 1,
+                name: 'Persian Empire',
+                email: 'admin@ancientStates.com',
+                city: 1,
+                armies: 11,
+            }];
+
+            const startCities = [{
+                id: 1,
+                owner: 1,
+                barracksLevel: 10,
+                forgeLevel: 10,
+                fieldsLevel: 30,
+                wallLevel: 30,
+                position: '0,0',
+            }];
+
+            /* Using create each because i plan to have more starting empires */
+            await Promise.all([
+                waterline.models.user.createEach(startUsers),
+                waterline.models.city.createEach(startCities),
+            ]);
+        }
+    },
+
     async repopulateAll(waterline) {
         await Promise.all([
             this.populateBaseBuildings(waterline),
             this.populateBaseUnits(waterline),
+            this.populateUsers(waterline),
         ]);
     },
 
 
-}
+};

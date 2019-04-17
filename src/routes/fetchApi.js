@@ -8,7 +8,7 @@ module.exports = {
     handler: async (request, responseToolkit) => {
         try {
             if (playerActions.isValidFecthAction(request.params.action)) {
-                return playerActions.fetchData(request.params.action);
+                return playerActions.fetchData(request.params.action, request.query);
             }
             /* Invalid api call */
             return responseToolkit.response({

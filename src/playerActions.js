@@ -20,6 +20,8 @@ module.exports = {
                 return true;
             case 'BaseUnits':
                 return true;
+            case 'Player':
+                return true;
             default:
                 return false;
         }
@@ -46,4 +48,8 @@ module.exports = {
         return this.waterline.models.basebuilding.find();
     },
 
-}
+    getPlayer(query) {
+        return this.waterline.models.user.find({ id: query.id }).populate('city');
+    },
+
+};
