@@ -42,6 +42,17 @@ module.exports = {
 
         const baseUnits = [{
             id: 1,
+            name: 'Persian Spearman',
+            description: 'Poorly armed and armor eastern warrior',
+            baseTrainTime: 50,
+            baseDamage: 8,
+            baseCost: 40,
+            activeTurns: '[6, 7, 8, 9, 10, 11, 12]',
+            baseHealth: 30,
+            type: 'Melee',
+            imageUrl: 'images/icons/icons8-military-base-100.png',
+        }, {
+            id: 2,
             name: 'Tribal Warriors',
             description: 'Strongest men of the tribe armed with clubs and spears',
             baseTrainTime: 100,
@@ -52,7 +63,7 @@ module.exports = {
             type: 'Melee',
             imageUrl: 'images/icons/icons8-military-base-100.png',
         }, {
-            id: 2,
+            id: 3,
             name: 'Peasant',
             description: 'Just Peasant armed with whatever he had on hands',
             baseTrainTime: 30,
@@ -71,10 +82,14 @@ module.exports = {
         /* Check if this is a new game start */
         /* taking out persian empire to avoid waterline warnings */
         const persianEmpire = await waterline.models.user.find({ id: 1 });
-        if (persianEmpire.length) {
+        if (!persianEmpire.length) {
+            console.warn('Setting up new game');
+
             await Promise.all([
                 waterline.models.user.destroy({ id: 1 }),
                 waterline.models.city.destroy({ id: 1 }),
+                waterline.models.army.destroy({ id: 1 }),
+                waterline.models.unit.destroy({ id: 1 }),
             ]);
 
             const startUsers = [{
@@ -82,7 +97,6 @@ module.exports = {
                 name: 'Persian Empire',
                 email: 'admin@ancientStates.com',
                 city: 1,
-                armies: 11,
             }];
 
             const startCities = [{
@@ -95,10 +109,26 @@ module.exports = {
                 position: '0,0',
             }];
 
+            const startArmies = [{
+                id: 1,
+                owner: 1,
+                position: '0',
+            }];
+
+            const startUnits = [{
+                id: 1,
+                baseUnit: 1,
+                number: 10000,
+                level: 1,
+                army: 1,
+            }];
+
             /* Using create each because i plan to have more starting empires */
             await Promise.all([
                 waterline.models.user.createEach(startUsers),
                 waterline.models.city.createEach(startCities),
+                waterline.models.unit.createEach(startUnits),
+                waterline.models.army.createEach(startArmies),
             ]);
         }
     },

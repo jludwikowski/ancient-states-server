@@ -49,7 +49,7 @@ module.exports = {
     },
 
     getPlayer(query) {
-        return this.waterline.models.user.find({ id: query.id }).populate('city');
+        return this.waterline.models.user.find({ id: query.id }).populate('city').populate('armies');
     },
 
 };
