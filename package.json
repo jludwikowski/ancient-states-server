@@ -4,7 +4,7 @@
   "description": "Server for Ancient States Game",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --runInBand",
     "start": "nodemon --exec babel-node src/start.js"
   },
   "repository": {
@@ -21,7 +21,7 @@
   "dependencies": {
     "@babel/runtime": "^7.4.3",
     "hapi": "^18.1.0",
-    "hapi-waterline": "^1.0.0",
+    "hapi-waterline": "github:jludwikowski/hapi-waterline",
     "sails-disk": "^1.1.0"
   },
   "devDependencies": {

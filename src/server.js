@@ -1,7 +1,6 @@
 import Hapi from 'hapi';
 import HapiWaterline from 'hapi-waterline';
 import diskAdapter from 'sails-disk';
-import path from 'path';
 import getApiRoute from './routes/fetchApi';
 import postApiRoute from './routes/postApi';
 import startState from './services/populateWithBasicData';
@@ -47,7 +46,9 @@ async function serverSetup() {
 }
 
 exports.init = async () => {
-    await serverSetup();
+    if (!server || !server.plugins['hapi-waterline']) {
+        await serverSetup();
+    }
     await server.initialize();
     return server;
 };

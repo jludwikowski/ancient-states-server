@@ -15,4 +15,6 @@
 .env.test.local
 .env.production.local
 .idea
+
+# Local datastore
 .tmp
