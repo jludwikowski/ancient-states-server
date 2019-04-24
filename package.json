@@ -4,8 +4,8 @@
   "description": "Server for Ancient States Game",
   "main": "index.js",
   "scripts": {
-    "test": "test",
-    "start": "nodemon --exec babel-node src/server.js"
+    "test": "jest",
+    "start": "nodemon --exec babel-node src/start.js"
   },
   "repository": {
     "type": "git",
@@ -19,8 +19,7 @@
   "author": "Julian Ludwikowki",
   "license": "ISC",
   "dependencies": {
-    "@babel/node": "^7.2.2",
-    "@babel/polyfill": "^7.4.3",
+    "@babel/runtime": "^7.4.3",
     "hapi": "^18.1.0",
     "hapi-waterline": "^1.0.0",
     "sails-disk": "^1.1.0"
@@ -28,6 +27,9 @@
   "devDependencies": {
     "@babel/cli": "^7.4.3",
     "@babel/core": "^7.4.3",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-transform-runtime": "^7.4.3",
+    "@babel/polyfill": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.0",

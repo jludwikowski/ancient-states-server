@@ -1,6 +1,7 @@
 import Hapi from 'hapi';
 import HapiWaterline from 'hapi-waterline';
 import diskAdapter from 'sails-disk';
+import path from 'path';
 import getApiRoute from './routes/fetchApi';
 import postApiRoute from './routes/postApi';
 import startState from './services/populateWithBasicData';
@@ -12,7 +13,7 @@ const server = new Hapi.Server({
     port: 7777,
 });
 
-async function reginsterWaterline() {
+async function registerWaterline() {
     const options = {
         adapters: {
             'disk-adapter': diskAdapter,
@@ -33,26 +34,32 @@ async function reginsterWaterline() {
     await server.register({
         plugin: HapiWaterline,
         options,
-    });
+    }, { once: true });
 
     /* Initialize data and components that will work with waterline */
     await startState.repopulateAll(server.plugins['hapi-waterline']);
     playerActions.initialize(server.plugins['hapi-waterline']);
 }
 
-async function start() {
+async function serverSetup() {
+    await registerWaterline();
+    server.route(getApiRoute, postApiRoute);
+}
+
+exports.init = async () => {
+    await serverSetup();
+    await server.initialize();
+    return server;
+};
+
+exports.start = async () => {
     try {
-        await reginsterWaterline();
-        server.route(getApiRoute, postApiRoute);
+        await serverSetup();
         await server.start();
     } catch (err) {
         console.error(err);
         process.exit(1);
     }
-
     console.log('Server running at: ', server.info.uri);
-}
-
-start()
-
-module.exports = server;
+    return server;
+};
