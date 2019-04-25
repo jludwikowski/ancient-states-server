@@ -10,5 +10,6 @@ module.exports = {
             collection: 'army',
             via: 'owner',
         },
+        resources: { model: 'resources', required: true },
     },
 };

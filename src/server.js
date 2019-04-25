@@ -3,7 +3,7 @@ import HapiWaterline from 'hapi-waterline';
 import diskAdapter from 'sails-disk';
 import getApiRoute from './routes/fetchApi';
 import postApiRoute from './routes/postApi';
-import startState from './services/populateWithBasicData';
+import startState from './services/baseData';
 import playerActions from './playerActions';
 
 /* For now all options are hardcoded. This will move to config file */

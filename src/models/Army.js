@@ -9,6 +9,9 @@ module.exports = {
             collection: 'unit',
             via: 'army',
         },
+        status: { type: 'string', defaultsTo: 'camp' },
+        orderDate: { type: 'string', allowNull: true },
+        targetId: { type: 'number', allowNull: true },
         position: { type: 'string', required: true },
     },
 };
