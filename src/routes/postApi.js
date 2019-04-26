@@ -1,5 +1,5 @@
 /* Divinding api into 2 section due to plans of having a lot of actions. This is just for clariy */
-import playerActions from '../playerActions';
+import playerActions from '../doActions';
 
 /* This is only for managing request and responces */
 module.exports = {

@@ -4,7 +4,9 @@ import diskAdapter from 'sails-disk';
 import getApiRoute from './routes/fetchApi';
 import postApiRoute from './routes/postApi';
 import startState from './services/baseData';
-import playerActions from './playerActions';
+import getActions from './getActions';
+import doActions from './doActions';
+import systemActions from './systemActions';
 
 /* For now all options are hardcoded. This will move to config file */
 const server = new Hapi.Server({
@@ -37,7 +39,10 @@ async function registerWaterline() {
 
     /* Initialize data and components that will work with waterline */
     await startState.repopulateAll(server.plugins['hapi-waterline']);
-    playerActions.initialize(server.plugins['hapi-waterline']);
+
+    getActions.initialize(server.plugins['hapi-waterline']);
+    doActions.initialize(server.plugins['hapi-waterline']);
+    systemActions.initialize(server.plugins['hapi-waterline']);
 }
 
 async function serverSetup() {
