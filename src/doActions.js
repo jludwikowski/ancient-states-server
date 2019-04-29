@@ -1,7 +1,7 @@
 import baseData from './services/baseData';
 import calculator from './calculator';
 import getActions from './getActions';
-import systemAcrions from './systemActions';
+import systemActions from './systemActions';
 
 module.exports = {
 
@@ -15,7 +15,7 @@ module.exports = {
                 return true;
             case 'CreatArmy':
                 return true;
-            case 'DestroyArmy':
+            case 'DisbandArmy':
                 return true;
             default:
                 return false;
@@ -66,8 +66,8 @@ module.exports = {
             newUnit => hasValidUnit(newUnit, targetArmy)
         );
 
-        const playerWithArmies = await getActions.getPlayer({ id: army.ownerId });
-        const garrison = await getActions.getArmy({ id: playerWithArmies.armies[0].id });
+        const player = await getActions.getPlayer({ id: army.ownerId });
+        const garrison = await getActions.getArmy({ id: player.armies[0].id });
         /* set position and other defaults if needed const newArmy = objectAssign() */
 
         if (hasEnoughMen(army, garrison)) {
@@ -76,10 +76,25 @@ module.exports = {
             units.forEach(unit => Object.assign(unit, { army: newArmy.id }));
             await this.waterline.models.unit.createEach(units);
             newArmy.units = units;
-            await systemAcrions.reduceArmy(garrison, newArmy);
+            await systemActions.reduceArmy(garrison, newArmy);
             return newArmy;
         }
         return { error: 'Cannot create new army' };
+    },
+
+    async DisbandArmy(army) {
+        const player = (await getActions.getPlayer({ id: army.owner }));
+        const garrison = await getActions.getArmy({ id: player.armies[0].id });
+
+        if (army.position !== garrison.position) {
+            return { error: 'Cannot disband army away from capital' };
+        }
+        Promise.all([
+            await systemActions.reinforceArmy(army, garrison),
+            await systemActions.reduceArmy(army, army),
+            await this.waterline.models.army.destroy({ id: army.id }),
+        ]);
+        return { message: `army ${army.id} disbanded` };
     },
 
     /* Helper checking if player can afford action. Double check after clinet app just in case */

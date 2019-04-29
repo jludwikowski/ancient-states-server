@@ -77,7 +77,6 @@ module.exports = {
     },
 
     startUsers: [{
-        id: 1,
         name: 'Persian Empire',
         email: 'admin@ancientStates.com',
         city: 1,
@@ -85,7 +84,6 @@ module.exports = {
     }],
 
     startResources: [{
-        id: 1,
         owner: 1,
         food: 10000,
         iron: 1000,
@@ -96,7 +94,6 @@ module.exports = {
     }],
 
     startCities: [{
-        id: 1,
         owner: 1,
         barracksLevel: 10,
         forgeLevel: 10,
@@ -106,13 +103,12 @@ module.exports = {
     }],
 
     startArmies: [{
-        id: 1,
         owner: 1,
-        position: '0',
+        position: '0,0',
+        name: 'Persian Garisson',
     }],
 
     startUnits: [{
-        id: 1,
         baseUnit: 1,
         number: 10000,
         level: 1,
