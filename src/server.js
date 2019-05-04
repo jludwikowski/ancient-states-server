@@ -7,30 +7,20 @@ import startState from './services/baseData';
 import getActions from './getActions';
 import doActions from './doActions';
 import systemActions from './systemActions';
+import config from '../config';
 
 /* For now all options are hardcoded. This will move to config file */
-const server = new Hapi.Server({
-    host: 'localhost',
-    port: 7777,
-});
+const server = new Hapi.Server(config.server, { cors: true });
 
 async function registerWaterline() {
-    const options = {
-        adapters: {
-            'disk-adapter': diskAdapter,
-        },
-        datastores: {
-            default: {
-                adapter: 'disk-adapter',
-            },
-        },
+    const options = Object.assign({
         models: {
             datatstore: 'default',
             migrate: 'alter',
         },
         decorateServer: true,
         path: ['../../../src/models'],
-    };
+    }, config.waterlineOptions);
 
     await server.register({
         plugin: HapiWaterline,
@@ -39,7 +29,6 @@ async function registerWaterline() {
 
     /* Initialize data and components that will work with waterline */
     await startState.repopulateAll(server.plugins['hapi-waterline']);
-
     getActions.initialize(server.plugins['hapi-waterline']);
     doActions.initialize(server.plugins['hapi-waterline']);
     systemActions.initialize(server.plugins['hapi-waterline']);
