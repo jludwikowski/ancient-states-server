@@ -10,7 +10,16 @@ import systemActions from './systemActions';
 import config from '../config';
 
 /* For now all options are hardcoded. This will move to config file */
-const server = new Hapi.Server(config.server, { cors: true });
+const server = new Hapi.Server({
+    routes: {
+        cors: {
+            origin: ['*'],
+            exposedHeaders: ['Accept'],
+            additionalExposedHeaders: ['Accept'],
+        },
+    },
+    ...config.server,
+});
 
 async function registerWaterline() {
     const options = Object.assign({
