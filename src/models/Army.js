@@ -4,6 +4,7 @@ module.exports = {
     attributes: {
         id: { type: 'number', autoMigrations: { autoIncrement: true } },
         name: { type: 'string', defaultsTo: 'New Army' },
+        description: { type: 'string', defaultsTo: '' },
         owner: { model: 'user' },
         units: {
             collection: 'unit',

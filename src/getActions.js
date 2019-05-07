@@ -53,6 +53,11 @@ module.exports = {
         )[0];
     },
 
+    async getPlayerArmies(query) {
+        return this.waterline.models.army.find({ owner: query.id })
+            .populate('units');
+    },
+
     getRules() {
         return calculator.rules;
     },
