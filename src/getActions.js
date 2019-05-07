@@ -32,11 +32,11 @@ module.exports = {
     },
 
     getBaseBuildings() {
-        return this.waterline.models.baseunit.find();
+        return this.waterline.models.basebuilding.find();
     },
 
     getBaseUnits() {
-        return this.waterline.models.basebuilding.find();
+        return this.waterline.models.baseunit.find();
     },
 
     async getPlayer(query) {
