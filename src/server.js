@@ -14,7 +14,6 @@ const server = new Hapi.Server({
     routes: {
         cors: {
             origin: ['*'],
-            exposedHeaders: ['Accept'],
             additionalExposedHeaders: ['Accept'],
         },
     },
@@ -45,7 +44,8 @@ async function registerWaterline() {
 
 async function serverSetup() {
     await registerWaterline();
-    server.route(getApiRoute, postApiRoute);
+    server.route(getApiRoute);
+    server.route(postApiRoute);
 }
 
 exports.init = async () => {
