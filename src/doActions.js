@@ -13,7 +13,7 @@ module.exports = {
         switch (action) {
             case 'UpgradeBuilding':
                 return true;
-            case 'CreatArmy':
+            case 'CreateArmy':
                 return true;
             case 'DisbandArmy':
                 return true;
@@ -22,12 +22,12 @@ module.exports = {
         }
     },
 
-    async runActions(action, payload) {
+    async runAction(action, payload) {
         /* Just for consistency and easy run with postApi */
         return this[`do${action}`](payload);
     },
 
-    async UpgradeBuilding(query) {
+    async doUpgradeBuilding(query) {
         const playerWithCity = (await getActions.getPlayer({ id: query.userId }));
         const baseBuilding = baseData.baseBuildings[query.buildingId - 1];
 
@@ -53,7 +53,7 @@ module.exports = {
         return { error: `Cannot upgrade building ${baseBuilding.name}` };
     },
 
-    async CreateArmy(army) {
+    async doCreateArmy(army) {
         /* Check if army has enough men of this unit type */
         const hasValidUnit = (newUnit, targetArmy) => targetArmy.units.find(
             targetUnit => targetUnit.baseUnit === newUnit.baseUnit
@@ -71,18 +71,23 @@ module.exports = {
         /* set position and other defaults if needed const newArmy = objectAssign() */
 
         if (hasEnoughMen(army, garrison)) {
-            const { units, ...armyWithoutUnits } = army;
-            const newArmy = await this.waterline.models.army.create(armyWithoutUnits).fetch();
-            units.forEach(unit => Object.assign(unit, { army: newArmy.id }));
-            await this.waterline.models.unit.createEach(units);
-            newArmy.units = units;
-            await systemActions.reduceArmy(garrison, newArmy);
-            return newArmy;
+            try {
+                const { units, ...armyWithoutUnits } = army;
+                const newArmy = await this.waterline.models.army.create(armyWithoutUnits).fetch();
+                units.forEach(unit => Object.assign(unit, { army: newArmy.id }));
+                await this.waterline.models.unit.createEach(units);
+                newArmy.units = units;
+                await systemActions.reduceArmy(garrison, newArmy);
+                return newArmy;
+            } catch (error) {
+                /* This is for early development so we know what happened. this will only show on server console */
+                console.log(error);
+            }
         }
         return { error: 'Cannot create new army' };
     },
 
-    async DisbandArmy(army) {
+    async doDisbandArmy(army) {
         const player = (await getActions.getPlayer({ id: army.owner }));
         const garrison = await getActions.getArmy({ id: player.armies[0].id });
 

@@ -8,9 +8,7 @@ module.exports = {
     handler: async (request, responseToolkit) => {
         try {
             if (playerActions.isValidPostAction(request.params.action)) {
-                return responseToolkit.response({
-                    mockObject: 'mock',
-                }).code(200);
+                return playerActions.runAction(request.params.action, request.payload);
             }
             /* Invalid api call */
             return responseToolkit.response({

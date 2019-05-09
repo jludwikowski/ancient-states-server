@@ -9,7 +9,7 @@ beforeAll(async () => {
 });
 
 test('Test upgrade building', async () => {
-    const player = (await playerActions.UpgradeBuilding({ userId: 1, buildingId: 1 }));
+    const player = (await playerActions.doUpgradeBuilding({ userId: 1, buildingId: 1 }));
     expect(player.length).not.toBe(0);
     expect(player.city.constructing).toBe('barracks');
     expect(player.city.constructionTimeLeft).toBe(10379);
@@ -22,7 +22,7 @@ test('Test upgrade building when already under construction', async () => {
             constructing: 'forge',
             constructionTimeLeft: 100,
         });
-    const result = (await playerActions.UpgradeBuilding({ userId: 1, buildingId: 1 }));
+    const result = (await playerActions.doUpgradeBuilding({ userId: 1, buildingId: 1 }));
     expect(result.error).toBe('Cannot upgrade building barracks');
     await playerActions.waterline.models.city.updateOne({ id: 1 })
         .set({
@@ -36,12 +36,12 @@ test('Test upgrade building with no money', async () => {
         .set({
             gold: 1000,
         });
-    const result = (await playerActions.UpgradeBuilding({ userId: 1, buildingId: 1 }));
+    const result = (await playerActions.doUpgradeBuilding({ userId: 1, buildingId: 1 }));
     expect(result.error).toBe('Cannot upgrade building barracks');
 }, 10000);
 
 test('Test create army with no enough men', async () => {
-    const army = (await playerActions.CreateArmy({
+    const army = (await playerActions.doCreateArmy({
         position: '0,0', owner: 1, name: 'Jest Test Army', units: [{ baseUnit: 1, number: 100000, level: 1 }],
     }));
     const garrison = await getActions.getArmy({ id: 1 });
@@ -50,7 +50,7 @@ test('Test create army with no enough men', async () => {
 }, 10000);
 
 test('Test create army with wrong level', async () => {
-    const army = (await playerActions.CreateArmy({
+    const army = (await playerActions.doCreateArmy({
         position: '0,0', owner: 1, name: 'Jest Test Army', units: [{ baseUnit: 1, number: 1000, level: 2 }],
     }));
     const garrison = await getActions.getArmy({ id: 1 });
@@ -59,7 +59,7 @@ test('Test create army with wrong level', async () => {
 }, 10000);
 
 test('Test create army', async () => {
-    const army = (await playerActions.CreateArmy({
+    const army = (await playerActions.doCreateArmy({
         position: '0,0', owner: 1, name: 'Jest Test Army', units: [{ baseUnit: 1, number: 100, level: 1 }],
     }));
     const garrison = await getActions.getArmy({ id: 1 });
@@ -76,7 +76,7 @@ test('Test disband army when not in your city', async () => {
     const ourTestArmy = testArmiesCollection[0];
     const garrison = await getActions.getArmy({ id: 1 });
     ourTestArmy.position = '999,999'
-    const result = await playerActions.DisbandArmy(ourTestArmy);
+    const result = await playerActions.doDisbandArmy(ourTestArmy);
     expect(result.error).toBe('Cannot disband army away from capital');
     expect(garrison.units[0].number).toBe(9900);
 }, 10000);
@@ -85,7 +85,7 @@ test('Test disband army when in your city', async () => {
     const testArmiesCollection = await playerActions.waterline.models.army.find({ name: 'Jest Test Army' })
         .populate('units');
     const ourTestArmy = testArmiesCollection[0];
-    const result = await playerActions.DisbandArmy(ourTestArmy);
+    const result = await playerActions.doDisbandArmy(ourTestArmy);
     const disbandedArmy = await playerActions.waterline.models.army.find({ id: ourTestArmy.id });
     expect(result.message).toBe('army 2 disbanded');
     expect(disbandedArmy.length).toBe(0);
