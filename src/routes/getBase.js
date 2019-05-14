@@ -1,14 +1,13 @@
-/* Divinding api into 2 section due to plans of having a lot of actions. This is just for clariy */
-import playerActions from '../doActions';
+import playerActions from '../getActions';
 
 /* This is only for managing request and responces */
 module.exports = {
-    method: 'POST',
-    path: '/api/do/{action}',
+    method: 'GET',
+    path: '/api/base-entities/{entity}',
     handler: async (request, responseToolkit) => {
         try {
-            if (playerActions.isValidPostAction(request.params.action)) {
-                return playerActions.runAction(request.params.action, request.payload);
+            if (playerActions.isValidFecthAction(request.params.entity)) {
+                return playerActions.fetchData(request.params.entity, request.query);
             }
             /* Invalid api call */
             return responseToolkit.response({

@@ -9,33 +9,28 @@ module.exports = {
 
     async fetchData(action, payload) {
         /* Decide what needs to be cached here and how */
-        return this[`get${action}`](payload);
+        const actionName = action.charAt(0).toUpperCase() + action.slice(1);
+        return this[`get${actionName}`](payload);
     },
 
     isValidFecthAction(action) {
         switch (action) {
-            case 'PlayerBuildings':
+            case 'buildings':
                 return true;
-            case 'PlayerArmies':
+            case 'units':
                 return true;
-            case 'BaseBuildings':
-                return true;
-            case 'BaseUnits':
-                return true;
-            case 'Player':
-                return true;
-            case 'Rules':
+            case 'rules':
                 return true;
             default:
                 return false;
         }
     },
 
-    getBaseBuildings() {
+    getBuildings() {
         return this.waterline.models.basebuilding.find();
     },
 
-    getBaseUnits() {
+    getUnits() {
         return this.waterline.models.baseunit.find();
     },
 
@@ -53,8 +48,8 @@ module.exports = {
         )[0];
     },
 
-    async getPlayerArmies(query) {
-        return this.waterline.models.army.find({ owner: query.id })
+    async getPlayerArmies(id) {
+        return this.waterline.models.army.find({ owner: id })
             .populate('units');
     },
 

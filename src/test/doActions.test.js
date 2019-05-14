@@ -43,7 +43,7 @@ test('Test upgrade building with no money', async () => {
 test('Test create army with no enough men', async () => {
     const army = (await playerActions.doCreateArmy({
         position: '0,0', owner: 1, name: 'Jest Test Army', units: [{ baseUnit: 1, number: 100000, level: 1 }],
-    }));
+    }, '1'));
     const garrison = await getActions.getArmy({ id: 1 });
     expect(army.error).toBe('Cannot create new army');
     expect(garrison.units[0].number).toBe(10000);
@@ -52,7 +52,7 @@ test('Test create army with no enough men', async () => {
 test('Test create army with wrong level', async () => {
     const army = (await playerActions.doCreateArmy({
         position: '0,0', owner: 1, name: 'Jest Test Army', units: [{ baseUnit: 1, number: 1000, level: 2 }],
-    }));
+    }, '1'));
     const garrison = await getActions.getArmy({ id: 1 });
     expect(army.error).toBe('Cannot create new army');
     expect(garrison.units[0].number).toBe(10000);
@@ -61,7 +61,7 @@ test('Test create army with wrong level', async () => {
 test('Test create army', async () => {
     const army = (await playerActions.doCreateArmy({
         position: '0,0', owner: 1, name: 'Jest Test Army', units: [{ baseUnit: 1, number: 100, level: 1 }],
-    }));
+    }, '1'));
     const garrison = await getActions.getArmy({ id: 1 });
     expect(army.length).not.toBe(0);
     expect(army.units.length).toBe(1);
@@ -87,7 +87,7 @@ test('Test disband army when in your city', async () => {
     const ourTestArmy = testArmiesCollection[0];
     const result = await playerActions.doDisbandArmy(ourTestArmy);
     const disbandedArmy = await playerActions.waterline.models.army.find({ id: ourTestArmy.id });
-    expect(result.message).toBe('army 2 disbanded');
+    expect(result.message).toBe(`army ${ourTestArmy.id} disbanded`);
     expect(disbandedArmy.length).toBe(0);
     const resultgarrison = await getActions.getArmy({ id: 1 });
     expect(resultgarrison.units[0].number).toBe(10000);
@@ -101,6 +101,10 @@ afterAll(async () => {
         playerActions.waterline.models.resources.updateOne({ id: 1 })
             .set({
                 gold: 10000,
+            }),
+        playerActions.waterline.models.unit.updateOne({ id: 1 })
+            .set({
+                number: 10000,
             }),
         playerActions.waterline.models.city.updateOne({ id: 1 })
             .set({

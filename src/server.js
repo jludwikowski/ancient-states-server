@@ -1,8 +1,6 @@
 import Hapi from 'hapi';
 import HapiWaterline from 'hapi-waterline';
-import diskAdapter from 'sails-disk';
-import getApiRoute from './routes/fetchApi';
-import postApiRoute from './routes/postApi';
+import routes from './routes';
 import startState from './services/baseData';
 import getActions from './getActions';
 import doActions from './doActions';
@@ -44,8 +42,7 @@ async function registerWaterline() {
 
 async function serverSetup() {
     await registerWaterline();
-    server.route(getApiRoute);
-    server.route(postApiRoute);
+    server.route(routes);
 }
 
 exports.init = async () => {

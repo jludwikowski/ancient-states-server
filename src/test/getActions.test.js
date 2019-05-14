@@ -8,7 +8,7 @@ beforeAll(async () => {
 });
 
 test('Fetching Base Buildings', async () => {
-    const buildinsBasesCollection = await playerActions.getBaseBuildings({});
+    const buildinsBasesCollection = await playerActions.getBuildings({});
     expect(buildinsBasesCollection.length).not.toBe(0);
 }, 10000);
 

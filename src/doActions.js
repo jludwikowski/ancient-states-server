@@ -22,9 +22,9 @@ module.exports = {
         }
     },
 
-    async runAction(action, payload) {
+    async runAction(action, payload, userId) {
         /* Just for consistency and easy run with postApi */
-        return this[`do${action}`](payload);
+        return this[`do${action}`](payload, userId);
     },
 
     async doUpgradeBuilding(query) {
@@ -53,7 +53,10 @@ module.exports = {
         return { error: `Cannot upgrade building ${baseBuilding.name}` };
     },
 
-    async doCreateArmy(army) {
+    async doCreateArmy(army, userId) {
+        if (userId !== army.owner.toString()) {
+            return { error: 'Invalid User' };
+        }
         /* Check if army has enough men of this unit type */
         const hasValidUnit = (newUnit, targetArmy) => targetArmy.units.find(
             targetUnit => targetUnit.baseUnit === newUnit.baseUnit

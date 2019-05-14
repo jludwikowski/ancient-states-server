@@ -1,21 +1,12 @@
-/* Divinding api into 2 section due to plans of having a lot of actions. This is just for clariy */
 import playerActions from '../getActions';
 
 /* This is only for managing request and responces */
 module.exports = {
     method: 'GET',
-    path: '/api/get/{action}',
+    path: '/api/players/{id}',
     handler: async (request, responseToolkit) => {
         try {
-            if (playerActions.isValidFecthAction(request.params.action)) {
-                return playerActions.fetchData(request.params.action, request.query);
-            }
-            /* Invalid api call */
-            return responseToolkit.response({
-                error: 'Not Found',
-                message: 'This is not the endpoint you are looking for',
-                statusCode: 404,
-            }).code(404);
+            return playerActions.fetchData('Player', request.query);
         } catch (err) {
             /* We won't pass exact error due to security reasons */
             return responseToolkit.response({
