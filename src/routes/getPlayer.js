@@ -18,5 +18,8 @@ module.exports = {
     },
     options: {
         auth: false,
+        description: 'Retries Player Data',
+        notes: 'Returns a player entity with all attached collections',
+        tags: ['api'],
     },
 };

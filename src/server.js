@@ -1,5 +1,9 @@
 import Hapi from 'hapi';
+import Inert from 'inert';
+import Vision from 'vision';
+import HapiSwagger from 'hapi-swagger';
 import HapiWaterline from 'hapi-waterline';
+import Pack from '../package';
 import routes from './routes';
 import startState from './services/baseData';
 import getActions from './getActions';
@@ -40,8 +44,26 @@ async function registerWaterline() {
     systemActions.initialize(server.plugins['hapi-waterline']);
 }
 
+async function registerSwaggerWithView() {
+    const swaggerOptions = {
+        info: {
+            title: 'Test API Documentation',
+            version: Pack.version,
+        },
+    };
+
+    await server.register([
+        Inert,
+        Vision,
+        {
+            plugin: HapiSwagger,
+            options: swaggerOptions,
+        },
+    ]);
+}
+
 async function serverSetup() {
-    await registerWaterline();
+    await Promise.all([registerWaterline(), registerSwaggerWithView()]);
     server.route(routes);
 }
 

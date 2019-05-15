@@ -1,4 +1,5 @@
 import playerActions from '../getActions';
+import Joi from "@hapi/joi";
 
 /* This is only for managing request and responces */
 module.exports = {
@@ -18,5 +19,13 @@ module.exports = {
     },
     options: {
         auth: false,
+        description: 'Get armies for selected player',
+        notes: 'Returns collection of army objects',
+        tags: ['api'],
+        validate: {
+            params: {
+                id: Joi.string().required().example('1'),
+            },
+        },
     },
 };

@@ -1,4 +1,5 @@
 import playerActions from '../getActions';
+import Joi from "@hapi/joi";
 
 /* This is only for managing request and responces */
 module.exports = {
@@ -26,5 +27,13 @@ module.exports = {
     },
     options: {
         auth: false,
+        description: 'Retrieve base entities from server',
+        notes: 'Returns array of entity prototypes',
+        tags: ['api'],
+        validate: {
+            params: {
+                entity: Joi.string().required().example('buildings'),
+            },
+        },
     },
 };
